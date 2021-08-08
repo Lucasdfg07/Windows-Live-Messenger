@@ -6,10 +6,6 @@ import Menu from '../menu';
 const Footer = () => {
     const [menuState, setMenuState] = useState(false);
     let [currentTime, setcurrentTime] = useState('');
-    
-    let date = new Date();
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
 
     function makeTwoDigits(time) {
         const timeString = `${time}`;
@@ -21,7 +17,12 @@ const Footer = () => {
 
     useEffect(() => {
         setInterval(function(){
-            setcurrentTime(`${makeTwoDigits(hours)}:${makeTwoDigits(minutes)}`)
+            let date = new Date();
+            let hours = date.getHours();
+            let minutes = date.getMinutes();
+
+            let hours_and_minutes = `${makeTwoDigits(hours)}:${makeTwoDigits(minutes)}`
+            setcurrentTime(hours_and_minutes)
         }, 1000);
     });
     
