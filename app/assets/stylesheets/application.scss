@@ -1,1 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 @import "bootstrap/scss/bootstrap";
+
+body {
+    background: url('background_windows.png') fixed no-repeat;
+    background-size: cover;
+}
+
+.windows_footer {
+    background-image: linear-gradient(#323976, #235BD9, #235BD9, #454B82);
+    opacity: 0.74;
+    height: 50px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.85);
+
+    .menu-button {
+        background-color: rgba(53, 115, 53, 0.84);
+        padding: 10px;
+        box-shadow: 0px -2px 2px rgba(255, 255, 255, 0.45);
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1.2rem;
+        color: white;
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+
+    .menu-button:hover {
+        background-color: rgba(53, 115, 53, 0.94);
+        box-shadow: 0px -2px 5px rgba(255, 255, 255, 0.45);
+    }
+
+    .clock-div {
+        background-color: rgb(18, 143, 232);
+        height: 100vh;
+        padding: 10px;
+        color: white;
+        border-left: 2px solid white;;
+    }
+}
+
+.menu {
+    width: 350px;
+    background: rgba(80, 121, 168, 0.78);
+    height: 400px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin-bottom: 50px!important;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.8);
+
+    .header {
+        background-image: linear-gradient(#1265D0, rgba(84, 145, 209, 0.72));
+        font-size: 1.2rem;
+        text-shadow: 0px 2px 2px rgba(0,0,0,0.9);
+        color: white;
+        box-shadow: 0px 2px 5px rgba(0,0,0,0.45);
+    }
+}

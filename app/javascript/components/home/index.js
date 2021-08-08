@@ -1,11 +1,12 @@
 import React from 'react';
+import Footer from '../footer/index'
 
-const Index = () => {
+const Home = () => {
     return (
-        <div className="text-center">
-            teste
+        <div>
+            <Footer />
         </div>
     )
 }
 
-export default Index;
+export default Home;
