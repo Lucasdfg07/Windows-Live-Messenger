@@ -5,7 +5,7 @@ const menu = () => {
     return (
         <div className="menu">
             <div className="header pt-1">
-                <img src={Photo} />
+                <img src={Photo} alt="Perfil Photo" />
                 
                 <span className="ps-3">Seu-PC</span>
             </div>

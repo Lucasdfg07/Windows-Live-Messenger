@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 @import "bootstrap/scss/bootstrap";
 
+@import "home";
+@import "shared/screen";
+@import "shared/footer";
+
 body {
     background: url('background_windows.png') fixed no-repeat;
     background-size: cover;
@@ -35,7 +39,7 @@ body {
         height: 100vh;
         padding: 10px;
         color: white;
-        border-left: 2px solid white;;
+        border-left: 2px solid white;
     }
 }
 
