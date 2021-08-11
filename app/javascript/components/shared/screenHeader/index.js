@@ -5,12 +5,19 @@ import MaximizeBtn from '../../../../assets/images/icons/maximize_btn.png';
 import CloseBtn from '../../../../assets/images/icons/close_btn.png';
 
 import { close, minimize, maximize, close_maximize } from '../../../store/modules/msn_screen';
+import { close_components_state } from '../../../store/modules/components';
+
 import { useDispatch, useSelector } from 'react-redux';
 
 const ScreenHeader = (props) => {
     const dispatch = useDispatch();
 
     const isScreenMaximized = useSelector((state) => state.msnScreen.maximized);
+
+    function handleClose() {
+        dispatch(close());
+        dispatch(close_components_state());
+    }
 
     return (
         <div className="header">
@@ -29,7 +36,7 @@ const ScreenHeader = (props) => {
                 </div>
 
                 <div className="d-inline">
-                    <img src={CloseBtn} alt="Close Button" onClick={() => dispatch(close())} />
+                    <img src={CloseBtn} alt="Close Button" onClick={() => handleClose()} />
                 </div>
             </div>
         </div>

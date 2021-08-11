@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 
 import store from '../store';
 
-import Home from './home';
+import Home from '../screens/home';
 
 class App extends React.Component {
   render () {
