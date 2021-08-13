@@ -1,6 +1,19 @@
 class Api::V1::UsersController < ApplicationController
     def index
-        render json: User.all
+        @online = User.all
+                    .where.not(status: [3, 4])
+                    .where.not(id: params['id'].to_i)
+
+        @offline = User.all.where(status: [3, 4])
+    end
+
+    def update
+        begin
+            @user.update!(user_params)
+            render json: { status: 200, user: @user, message: "Dados alterados com sucesso!" }
+        rescue => exception
+            render json: { status: 500, message: "#{exception}." }
+        end
     end
 
     def sign_in
@@ -17,7 +30,7 @@ class Api::V1::UsersController < ApplicationController
     end
 
     def sign_up
-        @user = User.new(sign_up_params)
+        @user = User.new(user_params)
 
         begin
             @user.save!
@@ -29,7 +42,11 @@ class Api::V1::UsersController < ApplicationController
 
     private
 
-    def sign_up_params
+    def set_user
+        @user = User.find(params[:id])
+    end
+
+    def user_params
         params.require(:user).permit(:name, :email, :photo, :description, :password)
     end
 end

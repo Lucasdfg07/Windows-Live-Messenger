@@ -30,4 +30,10 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  user:
+    status:
+      available: "Disponível"
+      occupied: "Ocupado"
+      away: "Ausente"
+      invisible: "Offline"
+      offline: "Offline"

@@ -4,19 +4,22 @@ import PropTypes from "prop-types"
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
-import store from '../store';
+import {store, persistor} from '../store';
 
 import Home from '../screens/home';
+import { PersistGate } from "redux-persist/integration/react";
 
 class App extends React.Component {
   render () {
     return (
       <Provider store={store}>
-        <BrowserRouter>
-          <Switch>
-            <Route exact path="/" render={() => <Home />} />
-          </Switch>
-        </BrowserRouter>
+        <PersistGate loading={null} persistor={persistor}>
+          <BrowserRouter>
+            <Switch>
+              <Route exact path="/" render={() => <Home />} />
+            </Switch>
+          </BrowserRouter>
+        </PersistGate>
       </Provider>
     );
   }

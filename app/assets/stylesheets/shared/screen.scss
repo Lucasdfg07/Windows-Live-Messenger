@@ -27,6 +27,14 @@
         }
     }
 
+    .logged_body {
+        padding: 0px!important;
+    }
+
+    .logged_header, .logged_body {
+        width: 600px!important;
+    }
+
     .body {
         background-image: linear-gradient(rgba(253, 254, 255, 0.6), rgba(215, 225, 243, 0.6), rgba(253, 254, 255, 0.6));
         color: #172B6D;

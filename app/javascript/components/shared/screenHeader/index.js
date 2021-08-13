@@ -13,6 +13,7 @@ const ScreenHeader = (props) => {
     const dispatch = useDispatch();
 
     const isScreenMaximized = useSelector((state) => state.msnScreen.maximized);
+    const user = useSelector((state) => state.user.value);
 
     function handleClose() {
         dispatch(close());
@@ -20,7 +21,7 @@ const ScreenHeader = (props) => {
     }
 
     return (
-        <div className="header">
+        <div className={`header ${user != undefined && 'logged_header' }`}>
             <div className="float-start">
                 <img src={props.icon} alt="Msn Icon" />
                 <span className="pl-2">{props.phrase}</span>

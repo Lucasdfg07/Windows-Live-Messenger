@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(version: 2021_08_10_180726) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "name"
-    t.json "photo"
+    t.string "photo"
     t.string "description"
     t.integer "status", default: 0
     t.index ["email"], name: "index_users_on_email", unique: true

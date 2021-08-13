@@ -21,6 +21,7 @@
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
     "react_ujs": "^2.6.1",
+    "redux-persist": "^6.0.0",
     "turbolinks": "^5.2.0",
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12"

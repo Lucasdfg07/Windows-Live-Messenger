@@ -1,13 +1,16 @@
-import {configureStore} from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import rootReducer from './modules/rootReducer';
 
-import msnScreenReducer from './modules/msn_screen';
-import userReducer from './modules/user';
-import componentReducer from './modules/components';
+const persistConfig = {
+    key: "root",
+    storage
+};
 
-export default configureStore({
-    reducer: {
-        msnScreen: msnScreenReducer,
-        user: userReducer,
-        component: componentReducer
-    },
-})
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+const store = configureStore({ reducer: persistedReducer })
+const persistor = persistStore(store);
+ 
+export { store, persistor };

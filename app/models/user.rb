@@ -4,7 +4,11 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  enum status: [:available, :occupied, :away, :invisible]
+  enum status: [:available, :occupied, :away, :invisible, :offline]
 
-  validates_presence_of :name, :email, :photo
+  validates_presence_of :name, :email
+
+  def translated_status
+    I18n.t("user.status.#{self.status}")
+  end
 end
