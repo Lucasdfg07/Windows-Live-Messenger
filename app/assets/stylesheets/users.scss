@@ -1,7 +1,21 @@
 .logged {
-    background-color: rgba(210, 220, 244, 0.7);
+    height: calc(100vh -60px);
+
+    .photo_div {
+        .input_change {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            background-color: rgba(10,10,10,0.4);
+            position: absolute;
+
+            #avatar {
+                display: none;
+            }
+        }
+    }
     
-    .user_photo {
+    .user_photo, .input_change {
         width: 100px;
         height: 100px;
         border: 1px solid black;
@@ -11,6 +25,37 @@
 
     .photo_div, .user_info {
         display: inline-block;
+    }
+
+    .user_info {
+        .input {
+            background: none;
+            border: none!important;
+            transition: 0.5s;
+        }
+
+        .input:focus {
+            background: rgba(245,245,245,0.7);
+            box-shadow: 0px 0px 10px rgba(10,10,10,0.3);
+            outline: none;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+        
+        .input-wrap .input {
+            position: absolute;
+            width: 100%;
+            left: 0;
+        }
+
+        .input {
+            border: 1px solid #ccc;
+            font-family: inherit;
+            font-size: inherit;
+            padding: 1px 6px;
+        }
     }
 
     .footer_background {
@@ -26,7 +71,6 @@
 }
 
 .users {
-    background-color: rgba(210, 220, 244, 0.7);
     margin-top: -50px;
 
     .checkbox {

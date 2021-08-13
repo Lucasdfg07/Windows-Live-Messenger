@@ -9,12 +9,24 @@ import MsnBanner from '../../../assets/images/logged_msn_logo.png';
 
 import UsersService from '../../services/users';
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { sign_in } from '../../store/modules/user';
+
+import uploadImage from '../../../assets/images/upload.png';
 
 const UserList = (props) => {
     const isScreenMaximized = useSelector((state) => state.msnScreen.maximized);
     const [onlineUsers, setOnlineUsers] = useState([]);
     const [offlineUsers, setOfflineUsers] = useState([]);
+
+    const [status, setStatus] = useState(handleStatus(props.user.status));
+    const [name, setName] = useState(props.user.name);
+    const [description, setDescription] = useState(props.user.description);
+    const [photo, setPhoto] = useState(props.user.photo);
+
+    const [showPhotoDiv, setShowPhotoDiv] = useState(false);
+
+    const dispatch = useDispatch();
 
     async function handleUsers() {
         const response = await UsersService.index(props.user.id);
@@ -28,9 +40,53 @@ const UserList = (props) => {
                     .replace(/\p{Diacritic}/gu, "")
     }
 
+    function handleUpload(file) {
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            setPhoto(reader.result)
+        }
+
+        reader.readAsDataURL(file)
+    }
+
+    async function handleSubmit() {
+        const user_hash = {
+            "user": {
+                "name": name,
+                "description": description,
+                "status": Number(status),
+                "photo": photo
+            }
+        }
+
+        const response = await UsersService.update(props.user.id, user_hash)
+
+        if(response.data.status == 200)
+            dispatch(sign_in(response.data.user));
+    }
+
+    function handleStatus(val) {
+        if(val == "available")
+            return 0
+
+        if(val == "occupied")
+            return 1
+
+        if(val == "away")
+            return 2
+
+        if(val == "invisible")
+            return 3
+    }
+
     useEffect(() => {
         handleUsers()
     }, [])
+
+    useEffect(() => {
+        handleSubmit()
+    }, [name, description, status, photo])
 
     return (
         <div className={`${isScreenMaximized && 'maximized_screen'} screen`}>
@@ -39,15 +95,46 @@ const UserList = (props) => {
             <ScreenBody>
                 <div className="logged">
                     <div className="p-3">
-                        <div className="photo_div">
+                        <div className="photo_div" 
+                            onMouseOver={() => setShowPhotoDiv(true)}
+                            onMouseLeave={() => setShowPhotoDiv(false)}>
+                                
+                            { (showPhotoDiv) &&
+                                <div className="input_change">
+                                    <label className="w-100">
+                                        <img src={uploadImage} alt="Upload Icon" />
+                                        <input type="file" 
+                                                id="avatar" 
+                                                accept="image/png, image/jpeg"
+                                                onChange={e => handleUpload(e.target.files[0])} />
+                                    </label>
+                                </div>
+                            }
+
                             <img src={props.user.photo} alt="User Photo" className="user_photo" />
                         </div>
 
                         <div className="user_info ms-3 mt-2">
-                            <b>{props.user.name}</b>
+                            <strong>
+                                <span className="input" 
+                                    onMouseLeave={e => setName(e.target.innerText)} 
+                                    role="textbox" 
+                                    contentEditable>{name}</span>
+                            </strong>
+
+                            <select onChange={e => setStatus(e.target.value)}>
+                                <option value="0" selected={handleStatus(props.user.status) == 0}>(Disponível)</option>
+                                <option value="1" selected={handleStatus(props.user.status) == 1}>(Ocupado)</option>
+                                <option value="2" selected={handleStatus(props.user.status) == 2}>(Ausente)</option>
+                                <option value="3" selected={handleStatus(props.user.status) == 3}>(Invisível)</option>
+                            </select>
+                            
 
                             <div className="mt-3">
-                                <span>{props.user.description != '' ? props.user.description : '<Escreva uma mensagem pessoal>'}</span>
+                                <span className="input" 
+                                        onMouseLeave={e => setDescription(e.target.innerText)} 
+                                        role="textbox" 
+                                        contentEditable>{description}</span>
                             </div>
                         </div>
 

@@ -1,4 +1,6 @@
 class Api::V1::UsersController < ApplicationController
+    before_action :set_user, only: [:update]
+    
     def index
         @online = User.all
                     .where.not(status: [3, 4])
@@ -47,6 +49,6 @@ class Api::V1::UsersController < ApplicationController
     end
 
     def user_params
-        params.require(:user).permit(:name, :email, :photo, :description, :password)
+        params.require(:user).permit(:name, :email, :status, :photo, :description, :password)
     end
 end
