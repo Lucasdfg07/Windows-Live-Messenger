@@ -71,11 +71,14 @@
 }
 
 .sign_out {
-    cursor: pointer;
     margin: 10px!important;
 }
 
-.sign_out:hover {
+.sign_out span {
+    cursor: pointer;
+}
+
+.sign_out span:hover {
     text-decoration: underline;
 }
 

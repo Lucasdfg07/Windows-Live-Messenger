@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -10,10 +10,28 @@ import ScreenHeader from '../shared/screenHeader';
 
 const Chat = (props) => {
     const isScreenMaximized = useSelector((state) => state.msnScreen.maximized);
-
     const user = useSelector((state) => state.user.value);
 
+    const [messages, setMessages] = useState([]);
+    const [message, setMessage] = useState('');
+
     const dispatch = useDispatch();
+
+    const messagesEndRef = useRef(null)
+
+    function handleSubmit(e) {
+        e.preventDefault();
+
+
+        setMessage('');
+        setMessages([...messages, message]);
+    }
+
+    const scrollToBottom = () => {
+        messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+    }
+
+    useEffect(scrollToBottom, [messages]);
 
     return (
         <div className={`${isScreenMaximized && 'maximized_screen'} screen`}>
@@ -32,7 +50,19 @@ const Chat = (props) => {
                                     Para: <b>{props.user.name} {`<${props.user.email}>`}</b>
                                 </div>
 
-                                <div className="chat_body"></div>
+                                <div className="chat_body p-2">
+                                    {
+                                        messages.map(function(message, index) {
+                                            return (
+                                                <div key={index}>
+                                                    {message}
+                                                </div>
+                                            )
+                                        })
+                                    }
+
+                                    <div ref={messagesEndRef} />
+                                </div>
                             </div>
 
                             <div className="col-3 chat_perfil">
@@ -40,21 +70,29 @@ const Chat = (props) => {
                             </div>
                         </div>
 
-                        <div className="row mt-3">
-                            <div className="col-9">
-                                <div className="text_header"></div>
-                                
-                                <div className="message">
-                                    <textarea></textarea>
+                        <form onSubmit={handleSubmit}>
+                            <div className="row mt-3">
+                                <div className="col-9">
+                                    <div className="text_header"></div>
+                                    
+                                    <div className="message">
+                                        <input type="text" 
+                                        value={message}
+                                        onChange={e => setMessage(e.target.value)} />
+
+                                        <button type="submit">
+                                            Enviar
+                                        </button>
+                                    </div>
+
+                                    <div className="text_footer"></div>
                                 </div>
 
-                                <div className="text_footer"></div>
+                                <div className="col-3 chat_perfil">
+                                    <img src={user.photo} alt="User Perfil" />
+                                </div>
                             </div>
-
-                            <div className="col-3 chat_perfil">
-                                <img src={user.photo} alt="User Perfil" />
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </ScreenBody>
