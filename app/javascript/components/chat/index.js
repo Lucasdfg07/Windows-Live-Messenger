@@ -9,18 +9,29 @@ import { list_user_screen_state } from '../../store/modules/components';
 import ScreenBody from '../shared/screenBody';
 import ScreenHeader from '../shared/screenHeader';
 
-import actionCable from 'actioncable';
+import { useActionCable } from 'use-action-cable';
 
 const Chat = (props) => {
     const isScreenMaximized = useSelector((state) => state.msnScreen.maximized);
     const user = useSelector((state) => state.user.value);
-
+    
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
-
+    
     const dispatch = useDispatch();
-
+    
     const messagesEndRef = useRef(null);
+    
+    // ActionCable Configuration
+    const channelParams = { channel: 'ChatChannel' };
+    const channelHandlers = {
+        received(data) {
+            handleMessages()
+        }
+    }
+
+    useActionCable(channelParams, channelHandlers);
+    // ActionCable end
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -32,7 +43,6 @@ const Chat = (props) => {
         }
 
         const response = await MessagesService.create(message_hash)
-
         setMessages([...messages, response.data.object]);
         setMessage('');
     }
@@ -48,9 +58,9 @@ const Chat = (props) => {
 
     useEffect(scrollToBottom, [messages]);
 
-    // useEffect(() => {
-    //     handleMessages()
-    // })
+    useEffect(() => {
+        handleMessages()
+    }, [])
 
     return (
         <div className={`${isScreenMaximized && 'maximized_screen'} screen`}>

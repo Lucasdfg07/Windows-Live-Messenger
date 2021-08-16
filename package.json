@@ -17,6 +17,7 @@
     "popper.js": "^1.16.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
+    "react-actioncable-provider": "^2.0.0",
     "react-dom": "^17.0.2",
     "react-draggable": "^4.4.3",
     "react-redux": "^7.2.4",
@@ -24,6 +25,7 @@
     "react_ujs": "^2.6.1",
     "redux-persist": "^6.0.0",
     "turbolinks": "^5.2.0",
+    "use-action-cable": "^6.0.8",
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12"
   },
