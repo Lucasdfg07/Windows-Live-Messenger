@@ -10,7 +10,9 @@ import MsnBanner from '../../../assets/images/logged_msn_logo.png';
 import UsersService from '../../services/users';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { sign_in } from '../../store/modules/user';
+
+import { sign_in, sign_out } from '../../store/modules/user';
+import {list_user_screen_state, chat_screen_state} from '../../store/modules/components';
 
 import uploadImage from '../../../assets/images/upload.png';
 
@@ -25,6 +27,8 @@ const UserList = (props) => {
     const [photo, setPhoto] = useState(props.user.photo);
 
     const [showPhotoDiv, setShowPhotoDiv] = useState(false);
+    const [onlineCollapse, setOnlineCollapse] = useState(false);
+    const [offlineCollapse, setOfflineCollapse] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -80,6 +84,11 @@ const UserList = (props) => {
             return 3
     }
 
+    function redirectToChat(target_user) {
+        dispatch(list_user_screen_state());
+        dispatch(chat_screen_state(target_user));
+    }
+
     useEffect(() => {
         handleUsers()
     }, [])
@@ -94,6 +103,10 @@ const UserList = (props) => {
 
             <ScreenBody>
                 <div className="logged">
+                    <div className="float-end sign_out">
+                        <span onClick={() => dispatch(sign_out())}>Sair</span>
+                    </div>
+
                     <div className="p-3">
                         <div className="photo_div" 
                             onMouseOver={() => setShowPhotoDiv(true)}
@@ -117,7 +130,7 @@ const UserList = (props) => {
                         <div className="user_info ms-3 mt-2">
                             <strong>
                                 <span className="input" 
-                                    onMouseLeave={e => setName(e.target.innerText)} 
+                                    onBlur={e => setName(e.target.innerText)} 
                                     role="textbox" 
                                     contentEditable>{name}</span>
                             </strong>
@@ -131,10 +144,11 @@ const UserList = (props) => {
                             
 
                             <div className="mt-3">
+                                {console.log(props)}
                                 <span className="input" 
-                                        onMouseLeave={e => setDescription(e.target.innerText)} 
+                                        onBlur={e => setDescription(e.target.innerText)} 
                                         role="textbox" 
-                                        contentEditable>{description}</span>
+                                        contentEditable>{description != undefined ? description : '<Escreva uma mensagem pessoal>'}</span>
                             </div>
                         </div>
 
@@ -143,45 +157,55 @@ const UserList = (props) => {
 
                     <div className="users p-3">
                         <div className="checkbox mb-3">
-                            <span className="status">+</span>
+                            <span className="status" onClick={() => setOnlineCollapse(!onlineCollapse)}>{onlineCollapse ? '-' : '+'}</span>
                             <b className="ms-2">Disponível ({onlineUsers.length})</b>
                         </div>
+                        
+                        {
+                            (onlineCollapse == false) &&
+                            <>
+                                { onlineUsers.map
+                                    (function(user, index) {
+                                        return (
+                                            <div className="users_list" key={index}>
+                                                <div className="d-inline">
+                                                    <img src={`/status/${normalizeString(user.status)}.png`} alt={`${user.status} icon`} />
+                                                </div>
 
-                        { onlineUsers.map
-                            (function(user, index) {
-                                return (
-                                    <div className="users_list" key={index}>
-                                        <div className="d-inline">
-                                            <img src={`/status/${normalizeString(user.status)}.png`} alt={`${user.status} icon`} />
-                                        </div>
-
-                                        <div className="d-inline">
-                                            {user.name} ({user.status})
-                                        </div>
-                                    </div>
-                                )
-                            })
+                                                <div className="d-inline target" onClick={() => redirectToChat(user)}>
+                                                    {user.name} ({user.status})
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </>
                         }
 
                         <div className="checkbox mb-3 mt-4">
-                            <span className="status">+</span>
+                            <span className="status" onClick={() => setOfflineCollapse(!offlineCollapse)}>{offlineCollapse ? '-' : '+'}</span>
                             <b className="ms-2">Offline ({offlineUsers.length})</b>
                         </div>
+                        
+                        {
+                            (offlineCollapse == false) &&
+                            <>
+                                { offlineUsers.map
+                                    (function(user, index) {
+                                        return (
+                                            <div className="users_list" key={index}>
+                                                <div className="d-inline">
+                                                    <img src={`/status/${normalizeString(user.status)}.png`} alt={`${user.status} icon`} />
+                                                </div>
 
-                        { offlineUsers.map
-                            (function(user, index) {
-                                return (
-                                    <div className="users_list" key={index}>
-                                        <div className="d-inline">
-                                            <img src={`/status/${normalizeString(user.status)}.png`} alt={`${user.status} icon`} />
-                                        </div>
-
-                                        <div className="d-inline">
-                                            {user.name} ({user.status})
-                                        </div>
-                                    </div>
-                                )
-                            })
+                                                <div className="d-inline">
+                                                    {user.name} ({user.status})
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </>
                         }
 
                         <div className="text-center m-3">

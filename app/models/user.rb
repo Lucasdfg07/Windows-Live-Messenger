@@ -8,6 +8,8 @@ class User < ApplicationRecord
 
   validates_presence_of :name, :email
 
+  attribute :photo, :string, default: '/no-perfil.jpg'
+
   def translated_status
     I18n.t("user.status.#{self.status}")
   end

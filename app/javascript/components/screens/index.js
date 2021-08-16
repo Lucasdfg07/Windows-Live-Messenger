@@ -4,6 +4,7 @@ import Draggable from 'react-draggable';
 
 import { useSelector } from 'react-redux';
 
+import Chat from '../chat';
 import SignIn from '../sign_in';
 import SignUp from '../sign_up';
 import UserList from '../user_list';
@@ -17,6 +18,9 @@ const Login = () => {
     const logInScreen = useSelector((state) => state.component.sign_in);
 
     const user = useSelector((state) => state.user.value);
+
+    const listScreen = useSelector((state) => state.component.list_user);
+    const chatScreen = useSelector((state) => state.component.chat);
     
     return (
         <>
@@ -26,7 +30,8 @@ const Login = () => {
                     <div>
                         { (logInScreen && user == undefined) && <SignIn /> }
                         { (signUpScreen && user == undefined) && <SignUp /> }
-                        { (user != undefined) && <UserList user={user} /> }
+                        { (user != undefined && listScreen) && <UserList user={user} /> }
+                        { (user != undefined && chatScreen.value) && <Chat user={chatScreen.partner} />}
                     </div>
                 </Draggable>
             }
@@ -36,7 +41,8 @@ const Login = () => {
                 <>
                     { (logInScreen && user == undefined) && <SignIn /> }
                     { (signUpScreen && user == undefined) && <SignUp /> }
-                    { (user != undefined) && <UserList user={user} /> }
+                    { (user != undefined && listScreen) && <UserList user={user} /> }
+                    { (user != undefined && chatScreen.value) && <Chat user={chatScreen.partner} />}
                 </>
             }
         </>

@@ -12,7 +12,7 @@ import BackgroundMsnIcon from '../../../assets/images/messenger_background.png';
 
 import UsersService from '../../services/users';
 import { sign_in } from '../../store/modules/user';
-import { sign_up_screen_state } from '../../store/modules/components';
+import { sign_up_screen_state, list_user_screen_state } from '../../store/modules/components';
 
 const SignIn = () => {
     const isScreenMaximized = useSelector((state) => state.msnScreen.maximized);
@@ -37,8 +37,10 @@ const SignIn = () => {
         
         setMessage(response.data.message);
 
-        if(response.data.status == 200)
+        if(response.data.status == 200) {
             dispatch(sign_in(response.data.user));
+            dispatch(list_user_screen_state());
+        }
     }
 
     function handleSignUpForm(e) {
@@ -62,14 +64,14 @@ const SignIn = () => {
                             <label>Endereço de Email:</label>
                             <input type="email" 
                                     className="login_form" 
-                                    onKeyUp={e => setEmail(e.target.value)} />
+                                    onChange={e => setEmail(e.target.value)} />
                         </div>
 
                         <div className="field mt-3">
                             <label>Senha:</label>
                             <input type="password" 
                                     className="login_form"
-                                    onKeyUp={e => setPassword(e.target.value)} />
+                                    onChange={e => setPassword(e.target.value)} />
                         </div>
 
                         <div className="field mt-3">

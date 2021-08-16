@@ -80,7 +80,7 @@ const SignUp = () => {
                             <label>Nome:</label>
                             <input type="text" 
                                     className="login_form" 
-                                    onKeyUp={e => setName(e.target.value)}
+                                    onChange={e => setName(e.target.value)}
                                     required />
                         </div>
 
@@ -88,7 +88,7 @@ const SignUp = () => {
                             <label>Endereço de Email:</label>
                             <input type="email" 
                                     className="login_form" 
-                                    onKeyUp={e => setEmail(e.target.value)}
+                                    onChange={e => setEmail(e.target.value)}
                                     required />
                         </div>
 
@@ -96,7 +96,7 @@ const SignUp = () => {
                             <label>Descrição:</label>
                             <textarea type="text" 
                                     className="login_form" 
-                                    onKeyUp={e => setDescription(e.target.value)}></textarea>
+                                    onChange={e => setDescription(e.target.value)}></textarea>
                             <small>(Escreva um pouco sobre você :D)</small>
                         </div>
 
@@ -104,7 +104,7 @@ const SignUp = () => {
                             <label>Senha:</label>
                             <input type="password" 
                                     className="login_form"
-                                    onKeyUp={e => setPassword(e.target.value)}
+                                    onChange={e => setPassword(e.target.value)}
                                     required />
                         </div>
 
