@@ -9,6 +9,8 @@ import { list_user_screen_state } from '../../store/modules/components';
 import ScreenBody from '../shared/screenBody';
 import ScreenHeader from '../shared/screenHeader';
 
+import actionCable from 'actioncable';
+
 const Chat = (props) => {
     const isScreenMaximized = useSelector((state) => state.msnScreen.maximized);
     const user = useSelector((state) => state.user.value);
@@ -18,7 +20,7 @@ const Chat = (props) => {
 
     const dispatch = useDispatch();
 
-    const messagesEndRef = useRef(null)
+    const messagesEndRef = useRef(null);
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -45,6 +47,10 @@ const Chat = (props) => {
     }
 
     useEffect(scrollToBottom, [messages]);
+
+    // useEffect(() => {
+    //     handleMessages()
+    // })
 
     return (
         <div className={`${isScreenMaximized && 'maximized_screen'} screen`}>
