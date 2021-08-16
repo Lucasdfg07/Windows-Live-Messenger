@@ -2,6 +2,8 @@ class Room < ApplicationRecord
   has_many :user_rooms
   has_many :users, through: :user_rooms
 
+  has_many :messages
+
   def generate_user_rooms(users)
     unless UserRoom.find_room_of_users(users[0], users[1]).present?
       users.each do |user_id|

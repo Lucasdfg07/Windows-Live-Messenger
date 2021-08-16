@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import MsnIcon from '../../../assets/images/icons/screen_msn_icon.png';
+import MessagesService from '../../services/messages';
 import { list_user_screen_state } from '../../store/modules/components';
 
 import ScreenBody from '../shared/screenBody';
@@ -19,16 +20,28 @@ const Chat = (props) => {
 
     const messagesEndRef = useRef(null)
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
 
+        const message_hash = {
+            "user": user.id,
+            "partner": props.user.id,
+            "content": message
+        }
 
+        const response = await MessagesService.create(message_hash)
+
+        setMessages([...messages, response.data.object]);
         setMessage('');
-        setMessages([...messages, message]);
     }
 
     const scrollToBottom = () => {
         messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+    }
+
+    async function handleMessages() {
+        const response = await MessagesService.index(user.id, props.user.id);
+        setMessages(response.data);
     }
 
     useEffect(scrollToBottom, [messages]);
@@ -55,7 +68,7 @@ const Chat = (props) => {
                                         messages.map(function(message, index) {
                                             return (
                                                 <div key={index}>
-                                                    {message}
+                                                    {message.content}
                                                 </div>
                                             )
                                         })

@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
+      get 'messages/index'
+    end
+  end
+  namespace :api do
+    namespace :v1 do
       get 'rooms/show'
     end
   end
@@ -17,6 +22,7 @@ Rails.application.routes.draw do
       get 'user_rooms/find_chat_user', to: 'user_rooms#find_chat_user'
 
       resources :rooms, only: [:create]
+      resources :messages, only: [:index, :create]
     end
   end
 end
