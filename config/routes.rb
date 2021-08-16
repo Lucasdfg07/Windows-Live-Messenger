@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  namespace :api do
+    namespace :v1 do
+      get 'rooms/show'
+    end
+  end
   devise_for :users
   root "home#index"
 
@@ -10,6 +15,8 @@ Rails.application.routes.draw do
 
       resources :user_rooms, only: [:create]
       get 'user_rooms/find_chat_user', to: 'user_rooms#find_chat_user'
+
+      resources :rooms, only: [:create]
     end
   end
 end

@@ -15,9 +15,12 @@ import { sign_in, sign_out } from '../../store/modules/user';
 import {list_user_screen_state, chat_screen_state} from '../../store/modules/components';
 
 import uploadImage from '../../../assets/images/upload.png';
+import RoomsService from '../../services/rooms';
 
 const UserList = (props) => {
     const isScreenMaximized = useSelector((state) => state.msnScreen.maximized);
+    const user = useSelector((state) => state.user.value);
+
     const [onlineUsers, setOnlineUsers] = useState([]);
     const [offlineUsers, setOfflineUsers] = useState([]);
 
@@ -84,7 +87,13 @@ const UserList = (props) => {
             return 3
     }
 
-    function redirectToChat(target_user) {
+    async function redirectToChat(target_user) {
+        const rooms_hash = {
+            "users": [user.id, target_user.id]
+        }
+
+        const response = await RoomsService.create(rooms_hash);
+
         dispatch(list_user_screen_state());
         dispatch(chat_screen_state(target_user));
     }
@@ -144,7 +153,6 @@ const UserList = (props) => {
                             
 
                             <div className="mt-3">
-                                {console.log(props)}
                                 <span className="input" 
                                         onBlur={e => setDescription(e.target.innerText)} 
                                         role="textbox" 
