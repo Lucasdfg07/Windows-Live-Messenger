@@ -55,6 +55,45 @@
             height: 30px;
         }
 
+        .emojis, .background {
+            position: absolute;
+            background-color: rgba(245,245,245,0.8);
+            box-shadow: 0px 0px 10px rgba(10,10,10,0.4);
+            overflow-y: scroll;
+        }
+
+        .background {
+            width: 350px;
+            height: 300px;
+            margin-top: -290px;
+
+            img {
+                height: 80px;
+                width: 150px;
+                cursor: pointer;
+            }
+        }
+
+        .emojis {
+            width: 150px;
+            height: 200px;
+            margin-top: -190px;
+
+            img {
+                width: 20px;
+            }
+
+            button {
+                border: none;
+            }
+        }
+
+        .chat_icons {
+            .button {
+                cursor: pointer;
+            }
+        }
+
         .message {
             input {
                 left: 0;

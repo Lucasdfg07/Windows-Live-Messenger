@@ -4,7 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import MsnIcon from '../../../assets/images/icons/screen_msn_icon.png';
 import MessagesService from '../../services/messages';
+
 import { list_user_screen_state } from '../../store/modules/components';
+import { background } from '../../store/modules/chat';
 
 import ScreenBody from '../shared/screenBody';
 import ScreenHeader from '../shared/screenHeader';
@@ -13,6 +15,7 @@ import { useActionCable } from 'use-action-cable';
 
 const Chat = (props) => {
     const isScreenMaximized = useSelector((state) => state.msnScreen.maximized);
+    const chatBackground = useSelector((state) => state.chat.background);
     const user = useSelector((state) => state.user.value);
     
     const [messages, setMessages] = useState([]);
@@ -21,6 +24,12 @@ const Chat = (props) => {
     const dispatch = useDispatch();
     
     const messagesEndRef = useRef(null);
+
+    const [displayIcons, setDisplayIcons] = useState(false);
+    const [chatBackgroundDiv, setChatBackgroundDiv] = useState(false);
+
+    const emojis = [..."😀 😃 😄 😁 😆 😅 😂 🤣 😊 😇 🙂 🙃 😉 😌 😍 🥰 😘 😗 😙 😚 😋 😛 😝 😜 🤪 🤨 🧐 🤓 😎 🤩 🥳 😏 😒 😞 😔 😟 😕 🙁 😣 😖 😫 😩 🥺 😢 😭 😤 😠 😡 🤬 🤯 😳 🥵 🥶 😱 😨 😰 😥 😓 🤗 🤔 🤭 🤫 🤥 😶 😐 😑 😬 🙄 😯 😦 😧 😮 😲 😴 🤤 😪 😵 🤐 🥴 🤢 🤮 🤧 😷 🤒 🤕 🤑 🤠 😈 👿 👹 👺 🤡 💩 👻 💀 👽 👾 🤖 🎃 😺 😸 😹 😻 😼 😽 🙀 😿 😾"].filter(v => v != " ")
+    
     
     // ActionCable Configuration
     const channelParams = { channel: 'ChatChannel' };
@@ -56,6 +65,16 @@ const Chat = (props) => {
         setMessages(response.data);
     }
 
+    function handleChange(element) {
+        setMessage(message + element);
+        setDisplayIcons(false);
+    }
+
+    function handleBackground(e) {
+        dispatch(background(e.target.src));
+        setChatBackgroundDiv(!chatBackgroundDiv);
+    }
+
     useEffect(scrollToBottom, [messages]);
 
     useEffect(() => {
@@ -67,7 +86,7 @@ const Chat = (props) => {
             <ScreenHeader phrase="Windows Live Messenger" icon={MsnIcon} />
 
             <ScreenBody>
-                <div className="chat">
+                <div className="chat" style={{ backgroundImage: `url('${chatBackground}')`, backgroundSize: 'cover' }}>
                     <div className="chat_screen">
                         <div className="sign_out">
                             <span onClick={() => dispatch(list_user_screen_state())}>Voltar</span>
@@ -98,11 +117,59 @@ const Chat = (props) => {
                                 <img src={props.user.photo} alt="User Perfil" />
                             </div>
                         </div>
+                        
+                        {
+                            displayIcons && 
+                            <div className="emojis">
+                                <div className="row">
+                                    {
+                                        emojis.map((e, i) => {
+                                            return (
+                                                <div className="col-4" key={i}>
+                                                    <button onClick={() => handleChange(e)}>{e}</button>
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        {
+                            chatBackgroundDiv &&
+                            <div className="background">
+                                <div className="row">
+                                    {
+                                        [...Array(5)].map((e, i) => {
+                                            return (
+                                                <div className="col-6 mt-3" key={i}>
+                                                    <img src={`/background/background_${i}.jpg`} 
+                                                         alt="Chat Background"
+                                                         onClick={(e) => handleBackground(e)} />
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </div>
+                            </div>
+                        }
 
                         <form onSubmit={handleSubmit}>
                             <div className="row mt-3">
                                 <div className="col-9">
-                                    <div className="text_header"></div>
+                                    <div className="text_header">
+                                        <div className="chat_icons mt-1">
+                                            <div className="d-inline ms-3 button" 
+                                                onClick={() => setDisplayIcons(!displayIcons)}>
+                                                😉
+                                            </div>
+
+                                            <div className="d-inline ms-3 button" 
+                                                onClick={() => setChatBackgroundDiv(!chatBackgroundDiv)}>
+                                                ⛱️
+                                            </div>
+                                        </div>
+                                    </div>
                                     
                                     <div className="message">
                                         <input type="text" 
