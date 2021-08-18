@@ -78,6 +78,10 @@
     left: 0!important;
     top: 0;
 
+    .chat {
+        height: calc(100vh - 80px);
+    }
+
     .header {
         width: 100vw!important;
     }
