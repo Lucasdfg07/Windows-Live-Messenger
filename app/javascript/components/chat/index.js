@@ -3,6 +3,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import MsnIcon from '../../../assets/images/icons/screen_msn_icon.png';
+import ShakingIcon from '../../../assets/images/icons/shaking.png';
+
 import MessagesService from '../../services/messages';
 
 import { list_user_screen_state } from '../../store/modules/components';
@@ -27,6 +29,7 @@ const Chat = (props) => {
 
     const [displayIcons, setDisplayIcons] = useState(false);
     const [chatBackgroundDiv, setChatBackgroundDiv] = useState(false);
+    const [shaking, setShaking] = useState(false);
 
     const emojis = [..."😀 😃 😄 😁 😆 😅 😂 🤣 😊 😇 🙂 🙃 😉 😌 😍 🥰 😘 😗 😙 😚 😋 😛 😝 😜 🤪 🤨 🧐 🤓 😎 🤩 🥳 😏 😒 😞 😔 😟 😕 🙁 😣 😖 😫 😩 🥺 😢 😭 😤 😠 😡 🤬 🤯 😳 🥵 🥶 😱 😨 😰 😥 😓 🤗 🤔 🤭 🤫 🤥 😶 😐 😑 😬 🙄 😯 😦 😧 😮 😲 😴 🤤 😪 😵 🤐 🥴 🤢 🤮 🤧 😷 🤒 🤕 🤑 🤠 😈 👿 👹 👺 🤡 💩 👻 💀 👽 👾 🤖 🎃 😺 😸 😹 😻 😼 😽 🙀 😿 😾"].filter(v => v != " ")
     
@@ -35,6 +38,15 @@ const Chat = (props) => {
     const channelParams = { channel: 'ChatChannel' };
     const channelHandlers = {
         received(data) {
+            if(data.user_id != user.id && data.content == "Você chamou atenção.") {
+                setShaking(true)
+
+                // Set false after animation
+                setTimeout(function() { 
+                    setShaking(false);
+                }, 2000);
+            }
+
             handleMessages()
         }
     }
@@ -75,6 +87,19 @@ const Chat = (props) => {
         setChatBackgroundDiv(!chatBackgroundDiv);
     }
 
+    async function handleShaking(e) {
+        e.preventDefault();
+
+        const message_hash = {
+            "user": user.id,
+            "partner": props.user.id,
+            "content": "Você chamou atenção."
+        }
+
+        const response = await MessagesService.create(message_hash)
+        setMessages([...messages, response.data.object]);
+    }
+
     useEffect(scrollToBottom, [messages]);
 
     useEffect(() => {
@@ -82,7 +107,7 @@ const Chat = (props) => {
     }, [])
 
     return (
-        <div className={`${isScreenMaximized && 'maximized_screen'} screen`}>
+        <div className={`${isScreenMaximized && 'maximized_screen'} screen ${shaking && 'shake'}`}>
             <ScreenHeader phrase="Windows Live Messenger" icon={MsnIcon} />
 
             <ScreenBody>
@@ -159,14 +184,19 @@ const Chat = (props) => {
                                 <div className="col-9">
                                     <div className="text_header">
                                         <div className="chat_icons mt-1">
-                                            <div className="d-inline ms-3 button" 
+                                            <div className="d-inline ms-4 me-4 button" 
                                                 onClick={() => setDisplayIcons(!displayIcons)}>
                                                 😉
                                             </div>
 
-                                            <div className="d-inline ms-3 button" 
+                                            <div className="d-inline ms-4 me-4 button" 
                                                 onClick={() => setChatBackgroundDiv(!chatBackgroundDiv)}>
                                                 ⛱️
+                                            </div>
+
+                                            <div className="d-inline ms-4 button"
+                                                 onClick={(e) => handleShaking(e)}>
+                                                <img src={ShakingIcon} alt="Shaking Icon" />
                                             </div>
                                         </div>
                                     </div>
