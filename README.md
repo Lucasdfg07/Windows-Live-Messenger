@@ -1,5 +1,5 @@
 
-![Logo of the project](https://github.com/Lucasdfg07/Spotify_clone/blob/master/app/javascript/assets/images/logo.png)
+![Logo of the project](https://github.com/Lucasdfg07/Windows-Live-Messenger/blob/master/public/no-perfil.jpg)
 
 
 ## Windows Live Messenger
