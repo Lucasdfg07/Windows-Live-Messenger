@@ -20,7 +20,11 @@ const Login = () => {
     const user = useSelector((state) => state.user.value);
 
     const listScreen = useSelector((state) => state.component.list_user);
+
     const chatScreen = useSelector((state) => state.component.chat);
+    const notification_state = useSelector((state) => state.chat.notification);
+
+    console.log(notification_state)
     
     return (
         <>
@@ -44,6 +48,20 @@ const Login = () => {
                     { (user != undefined && listScreen) && <UserList user={user} /> }
                     { (user != undefined && chatScreen.value) && <Chat user={chatScreen.partner} />}
                 </>
+            }
+
+            {
+                notification_state != undefined &&
+                <div className="message_notification row">
+                    <div className="photo col-5">
+                        <img src={notification_state.user.photo} alt="Perfil Photo" />
+                    </div>
+
+                    <div className="col-7">
+                        <b>{notification_state.user.name} disse:</b> <br />
+                        {notification_state.message.content}
+                    </div>
+                </div>
             }
         </>
     )

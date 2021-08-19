@@ -8,7 +8,7 @@ import ShakingIcon from '../../../assets/images/icons/shaking.png';
 import MessagesService from '../../services/messages';
 
 import { list_user_screen_state } from '../../store/modules/components';
-import { background } from '../../store/modules/chat';
+import { background, notification } from '../../store/modules/chat';
 
 import ScreenBody from '../shared/screenBody';
 import ScreenHeader from '../shared/screenHeader';
@@ -38,13 +38,23 @@ const Chat = (props) => {
     const channelParams = { channel: 'ChatChannel' };
     const channelHandlers = {
         received(data) {
-            if(data.user_id != user.id && data.content == "Você chamou atenção.") {
+            if(data.message.user_id != user.id && data.message.content == "Você chamou atenção.") {
                 setShaking(true)
-                play_audio();
+                play_audio('msn_nudge');
 
                 // Set false after animation
                 setTimeout(function() { 
                     setShaking(false);
+                }, 2000);
+            }
+
+            if(data.message.user_id != user.id && data.message.content != "Você chamou atenção.") {
+                play_audio('msn_notification');
+                dispatch(notification(data));
+
+                // Set false after animation
+                setTimeout(function() { 
+                    dispatch(notification(undefined));
                 }, 2000);
             }
 
@@ -101,8 +111,8 @@ const Chat = (props) => {
         setMessages([...messages, response.data.object]);
     }
 
-    function play_audio() {
-        let audio = new Audio('/msn_nudge.mp3');
+    function play_audio(sound) {
+        let audio = new Audio(`/${sound}.mp3`);
         audio.play();
     }
 
