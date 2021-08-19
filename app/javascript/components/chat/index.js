@@ -40,6 +40,7 @@ const Chat = (props) => {
         received(data) {
             if(data.user_id != user.id && data.content == "Você chamou atenção.") {
                 setShaking(true)
+                play_audio();
 
                 // Set false after animation
                 setTimeout(function() { 
@@ -98,6 +99,11 @@ const Chat = (props) => {
 
         const response = await MessagesService.create(message_hash)
         setMessages([...messages, response.data.object]);
+    }
+
+    function play_audio() {
+        let audio = new Audio('/msn_nudge.mp3');
+        audio.play();
     }
 
     useEffect(scrollToBottom, [messages]);
@@ -169,8 +175,8 @@ const Chat = (props) => {
                                             return (
                                                 <div className="col-6 mt-3" key={i}>
                                                     <img src={`/background/background_${i}.jpg`} 
-                                                         alt="Chat Background"
-                                                         onClick={(e) => handleBackground(e)} />
+                                                        alt="Chat Background"
+                                                        onClick={(e) => handleBackground(e)} />
                                                 </div>
                                             )
                                         })
@@ -195,7 +201,7 @@ const Chat = (props) => {
                                             </div>
 
                                             <div className="d-inline ms-4 button"
-                                                 onClick={(e) => handleShaking(e)}>
+                                                onClick={(e) => handleShaking(e)}>
                                                 <img src={ShakingIcon} alt="Shaking Icon" />
                                             </div>
                                         </div>
