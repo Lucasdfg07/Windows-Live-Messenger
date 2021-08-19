@@ -128,10 +128,6 @@ const SignUp = () => {
                         <div className="field mt-4">
                             <a href="#" onClick={e => handleSignInForm(e)}>Login</a>
                         </div>
-
-                        <div className="field">
-                            <a href="#">Esqueceu Sua Senha?</a>
-                        </div>
                     </div>
                 </form>
 

@@ -102,10 +102,6 @@ const SignIn = () => {
                         <div className="field mt-4">
                             <a href="#" onClick={e => handleSignUpForm(e)}>Me Cadastrar</a>
                         </div>
-
-                        <div className="field">
-                            <a href="#">Esqueceu Sua Senha?</a>
-                        </div>
                     </div>
                 </form>
 
