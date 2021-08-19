@@ -36,7 +36,7 @@ const Login = () => {
     const channelParams = { channel: 'ChatChannel' };
     const channelHandlers = {
         received(data) {
-            if(data.message.user_id != user.id) {
+            if(data.partner.id == user.id) {
                 dispatch(notification(data));
 
                 let audio = new Audio(`/msn_notification.mp3`);

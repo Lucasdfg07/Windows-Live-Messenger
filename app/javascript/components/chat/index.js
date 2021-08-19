@@ -38,7 +38,7 @@ const Chat = (props) => {
     const channelParams = { channel: 'ChatChannel' };
     const channelHandlers = {
         received(data) {
-            if(data.message.user_id != user.id && data.message.content == "Você chamou atenção.") {
+            if(data.partner.id == user.id && data.message.content == "Você chamou atenção.") {
                 setShaking(true)
                 play_audio('msn_nudge');
 

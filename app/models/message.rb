@@ -9,7 +9,8 @@ class Message < ApplicationRecord
   def message_attributes
     {
       "user": self.user,
-      "message": self
+      "message": self,
+      "partner": self.room.users.where.not(id: self.user_id).first
     }
   end
 end
