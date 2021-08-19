@@ -2,12 +2,15 @@ import React from 'react';
 
 import Draggable from 'react-draggable';
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Chat from '../chat';
 import SignIn from '../sign_in';
 import SignUp from '../sign_up';
 import UserList from '../user_list';
+
+import { useActionCable } from 'use-action-cable';
+import { emoji, notification } from '../../store/modules/chat';
 
 const Login = () => {
     const msnScreen = useSelector((state) => state.msnScreen.value);
@@ -24,7 +27,45 @@ const Login = () => {
     const chatScreen = useSelector((state) => state.component.chat);
     const notification_state = useSelector((state) => state.chat.notification);
 
-    console.log(notification_state)
+    const emojiState = useSelector((state) => state.chat.emoji);
+    const videosArray = ["alien", "ball_kicking", "frog", "guitar", "heart", "hiding", "hip_hop", "ice_cream", "kiss", "knocking", "lamp", "laughing", "pig", "venerate", "water_ball"];
+
+    const dispatch = useDispatch();
+
+    // ActionCable Configuration
+    const channelParams = { channel: 'ChatChannel' };
+    const channelHandlers = {
+        received(data) {
+            if(data.message.user_id != user.id) {
+                dispatch(notification(data));
+
+                let audio = new Audio(`/msn_notification.mp3`);
+                audio.play();
+
+                setTimeout(function() { 
+                    dispatch(notification(undefined))
+                }, 2000);
+
+                setEmoji(data.message.content);
+            }
+        }
+    }
+
+    useActionCable(channelParams, channelHandlers);
+    // ActionCable end
+
+    function setEmoji(content) {
+        if(videosArray.indexOf(content) > -1) {
+            // Set emojis
+            dispatch(emoji(content));
+
+            setTimeout(function() { 
+                dispatch(emoji(undefined));
+            }, 10000);
+        } else {
+            return
+        }
+    }
     
     return (
         <>
@@ -35,7 +76,7 @@ const Login = () => {
                         { (logInScreen && user == undefined) && <SignIn /> }
                         { (signUpScreen && user == undefined) && <SignUp /> }
                         { (user != undefined && listScreen) && <UserList user={user} /> }
-                        { (user != undefined && chatScreen.value) && <Chat user={chatScreen.partner} />}
+                        { (user != undefined && chatScreen.value) && <Chat user={chatScreen.partner} videos={videosArray} />}
                     </div>
                 </Draggable>
             }
@@ -46,8 +87,16 @@ const Login = () => {
                     { (logInScreen && user == undefined) && <SignIn /> }
                     { (signUpScreen && user == undefined) && <SignUp /> }
                     { (user != undefined && listScreen) && <UserList user={user} /> }
-                    { (user != undefined && chatScreen.value) && <Chat user={chatScreen.partner} />}
+                    { (user != undefined && chatScreen.value) && <Chat user={chatScreen.partner} videos={videosArray} />}
                 </>
+            }
+
+            {
+                (emojiState != undefined && user != undefined && chatScreen.value) &&
+                <video autoPlay>
+                    <source src={`/videos/${emojiState}.mp4`} type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
             }
 
             {

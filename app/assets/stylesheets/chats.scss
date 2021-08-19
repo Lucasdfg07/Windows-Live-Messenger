@@ -20,6 +20,29 @@
             height: 300px;
             border: 1px solid rgba(14, 49, 127, 0.1);
             overflow-y: scroll;
+
+            .message {
+                margin: 20px 0px;
+
+                span {
+                    padding: 5px 10px;
+                    width: auto;
+                    background-color: rgba(9, 75, 31, 0.7);
+                    border-radius: 10px;
+                    box-shadow: 0px 0px 10px rgba(10,10,10,0.3);
+                    color: white;
+                }
+
+                .current_user {
+                    background-color: rgba(9, 75, 31, 0.7);
+                    float: right;
+                }
+
+                .partner_user {
+                    background-color: rgba(28, 45, 124, 0.7);
+                    float: left;
+                }
+            }
         }
 
         .chat_perfil {
@@ -55,7 +78,7 @@
             height: 30px;
         }
 
-        .emojis, .background {
+        .emojis, .background, .winks {
             position: absolute;
             background-color: rgba(245,245,245,0.8);
             box-shadow: 0px 0px 10px rgba(10,10,10,0.4);
@@ -70,6 +93,19 @@
             img {
                 height: 80px;
                 width: 150px;
+                cursor: pointer;
+            }
+        }
+
+        .winks {
+            width: 350px;
+            height: 300px;
+            margin-top: -290px;
+            margin-left: 100px;
+
+            img {
+                height: 80px;
+                width: 100%;
                 cursor: pointer;
             }
         }

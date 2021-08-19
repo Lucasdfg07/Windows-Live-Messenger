@@ -74,6 +74,15 @@
     }
 }
 
+video {
+    z-index: 9999!important;
+    height: calc(100vh - 50px);
+    position: absolute;
+    width: 100vw;
+    top: 0;
+    left: 0;
+}
+
 .maximized_screen {
     left: 0!important;
     top: 0;

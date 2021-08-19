@@ -8,7 +8,7 @@ import ShakingIcon from '../../../assets/images/icons/shaking.png';
 import MessagesService from '../../services/messages';
 
 import { list_user_screen_state } from '../../store/modules/components';
-import { background, notification } from '../../store/modules/chat';
+import { background, emoji } from '../../store/modules/chat';
 
 import ScreenBody from '../shared/screenBody';
 import ScreenHeader from '../shared/screenHeader';
@@ -19,7 +19,7 @@ const Chat = (props) => {
     const isScreenMaximized = useSelector((state) => state.msnScreen.maximized);
     const chatBackground = useSelector((state) => state.chat.background);
     const user = useSelector((state) => state.user.value);
-    
+
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
     
@@ -28,12 +28,12 @@ const Chat = (props) => {
     const messagesEndRef = useRef(null);
 
     const [displayIcons, setDisplayIcons] = useState(false);
+    const [displayVideos, setDisplayVideos] = useState(false);
     const [chatBackgroundDiv, setChatBackgroundDiv] = useState(false);
     const [shaking, setShaking] = useState(false);
 
     const emojis = [..."😀 😃 😄 😁 😆 😅 😂 🤣 😊 😇 🙂 🙃 😉 😌 😍 🥰 😘 😗 😙 😚 😋 😛 😝 😜 🤪 🤨 🧐 🤓 😎 🤩 🥳 😏 😒 😞 😔 😟 😕 🙁 😣 😖 😫 😩 🥺 😢 😭 😤 😠 😡 🤬 🤯 😳 🥵 🥶 😱 😨 😰 😥 😓 🤗 🤔 🤭 🤫 🤥 😶 😐 😑 😬 🙄 😯 😦 😧 😮 😲 😴 🤤 😪 😵 🤐 🥴 🤢 🤮 🤧 😷 🤒 🤕 🤑 🤠 😈 👿 👹 👺 🤡 💩 👻 💀 👽 👾 🤖 🎃 😺 😸 😹 😻 😼 😽 🙀 😿 😾"].filter(v => v != " ")
-    
-    
+
     // ActionCable Configuration
     const channelParams = { channel: 'ChatChannel' };
     const channelHandlers = {
@@ -48,16 +48,6 @@ const Chat = (props) => {
                 }, 2000);
             }
 
-            if(data.message.user_id != user.id && data.message.content != "Você chamou atenção.") {
-                play_audio('msn_notification');
-                dispatch(notification(data));
-
-                // Set false after animation
-                setTimeout(function() { 
-                    dispatch(notification(undefined));
-                }, 2000);
-            }
-
             handleMessages()
         }
     }
@@ -65,13 +55,13 @@ const Chat = (props) => {
     useActionCable(channelParams, channelHandlers);
     // ActionCable end
 
-    async function handleSubmit(e) {
+    async function handleSubmit(e, content) {
         e.preventDefault();
 
         const message_hash = {
             "user": user.id,
             "partner": props.user.id,
-            "content": message
+            "content": content
         }
 
         const response = await MessagesService.create(message_hash)
@@ -98,17 +88,13 @@ const Chat = (props) => {
         setChatBackgroundDiv(!chatBackgroundDiv);
     }
 
-    async function handleShaking(e) {
-        e.preventDefault();
+    function handleShaking(e) {
+        handleSubmit(e, "Você chamou atenção.");
+    }
 
-        const message_hash = {
-            "user": user.id,
-            "partner": props.user.id,
-            "content": "Você chamou atenção."
-        }
-
-        const response = await MessagesService.create(message_hash)
-        setMessages([...messages, response.data.object]);
+    function handleVideos(event, state) {
+        handleSubmit(event, state);
+        setDisplayVideos(false);
     }
 
     function play_audio(sound) {
@@ -143,8 +129,12 @@ const Chat = (props) => {
                                     {
                                         messages.map(function(message, index) {
                                             return (
-                                                <div key={index}>
-                                                    {message.content}
+                                                <div key={index} className="message">
+                                                    <span className={`${message.user_id == user.id ? 'current_user' : 'partner_user'}`}>
+                                                        {message.content}
+                                                    </span>
+
+                                                    <br />
                                                 </div>
                                             )
                                         })
@@ -175,6 +165,25 @@ const Chat = (props) => {
                                 </div>
                             </div>
                         }
+                        
+                        {
+                            displayVideos &&
+                            <div className="winks">
+                                <div className="row">
+                                    {
+                                        props.videos.map((element, i) => {
+                                            return (
+                                                <div className="col-6 mt-3" key={i}>
+                                                    <img src={`/video_banners/${element}.png`} 
+                                                        alt="Chat Background"
+                                                        onClick={(event) => handleVideos(event, element)} />
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </div>
+                            </div>
+                        }
 
                         {
                             chatBackgroundDiv &&
@@ -195,7 +204,7 @@ const Chat = (props) => {
                             </div>
                         }
 
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={(e) => handleSubmit(e, message)}>
                             <div className="row mt-3">
                                 <div className="col-9">
                                     <div className="text_header">
@@ -208,6 +217,11 @@ const Chat = (props) => {
                                             <div className="d-inline ms-4 me-4 button" 
                                                 onClick={() => setChatBackgroundDiv(!chatBackgroundDiv)}>
                                                 ⛱️
+                                            </div>
+
+                                            <div className="d-inline ms-4 me-4 button"
+                                                onClick={(e) => setDisplayVideos(!displayVideos)}>
+                                                😉
                                             </div>
 
                                             <div className="d-inline ms-4 button"

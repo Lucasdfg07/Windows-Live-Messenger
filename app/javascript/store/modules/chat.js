@@ -4,7 +4,8 @@ export const chatSlice = createSlice({
   name: 'chat',
   initialState: {
     background: '',
-    notification: undefined
+    notification: undefined,
+    emoji: undefined
   },
   reducers: {
     background: (state, background) => {
@@ -12,11 +13,14 @@ export const chatSlice = createSlice({
     },
     notification: (state, notification) => {
       state.notification = notification.payload
+    },
+    emoji: (state, emoji) => {
+      state.emoji = emoji.payload
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { background, notification } = chatSlice.actions
+export const { background, notification, emoji, videos_array } = chatSlice.actions
 
 export default chatSlice.reducer
