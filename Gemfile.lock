@@ -166,6 +166,7 @@ GEM
       execjs
       railties (>= 3.2)
       tilt
+    redis (4.4.0)
     regexp_parser (2.1.1)
     responders (3.0.1)
       actionpack (>= 5.0)
@@ -239,6 +240,7 @@ DEPENDENCIES
   rack-mini-profiler (~> 2.0)
   rails (~> 6.1.4)
   react-rails
+  redis
   sass-rails (>= 6)
   selenium-webdriver
   spring

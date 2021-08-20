@@ -12,6 +12,9 @@ gem 'devise'
 # Allow API Requests
 gem 'rack-cors'
 
+# Install Redis
+gem 'redis'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.1.4'
 # Use postgresql as the database for Active Record
