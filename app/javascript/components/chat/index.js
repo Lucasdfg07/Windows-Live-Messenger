@@ -122,7 +122,7 @@ const Chat = (props) => {
                         <div className="row">
                             <div className="col-9">
                                 <div className="chat_header">
-                                    Para: <b><span className="truncate">{user.name}</span> {`<${props.user.email}>`}</b>
+                                    Para: <b>{props.user.name} {`<${props.user.email}>`}</b>
                                 </div>
 
                                 <div className="chat_body p-2">
