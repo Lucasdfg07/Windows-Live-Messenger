@@ -181,7 +181,7 @@ const UserList = (props) => {
                                                 </div>
 
                                                 <div className="d-inline target" onClick={() => redirectToChat(user)}>
-                                                    {user.name} ({user.status})
+                                                    <span className="truncate">{user.name}</span> ({user.status})
                                                 </div>
                                             </div>
                                         )
@@ -207,7 +207,7 @@ const UserList = (props) => {
                                                 </div>
 
                                                 <div className="d-inline">
-                                                    {user.name} ({user.status})
+                                                    <span className="truncate">{user.name}</span> ({user.status})
                                                 </div>
                                             </div>
                                         )
